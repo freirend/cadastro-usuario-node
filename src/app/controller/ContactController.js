@@ -1,10 +1,13 @@
+const { request } = require('express')
 const ContactsRepository = require('../controller/repositories/ContactsRepository')
 
 class ContactController{
 
     async index(req, res){
+
+        const { orderBy } = req.query
         
-        const contacts = await ContactsRepository.findAll()
+        const contacts = await ContactsRepository.findAll(orderBy)
 
         res.json(contacts)
     }
@@ -75,10 +78,6 @@ class ContactController{
         const { id } = req.params
 
         const contact = await ContactsRepository.findById(id)
-
-        if(!contact){
-            res.status(400).json({ error:'Contact Not Found' })
-        }
 
         await ContactsRepository.delete(id)
 
